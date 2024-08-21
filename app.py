@@ -3,14 +3,24 @@ from flask import Flask, request, jsonify
 app = Flask(__name__)
 latest_string = None
 
+@app.route('your route', methods=['GET'])
+def yourMethod(params):
+    response = flask.jsonify({'some': 'data'})
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
+
 @app.route('/submit_string', methods=['POST'])
 def submit_string():
     global latest_string
     if 'string' in request.form:
         latest_string = request.form['string']
-        return jsonify({'message': 'String submitted successfully'})
+        response = jsonify({'message': 'String submitted successfully'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
     else:
-        return jsonify({'error': 'No string found in the request'}), 400
+        response = jsonify({'error': 'No string found in the request'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 400
 
 @app.route('/get_latest_string', methods=['POST'])
 def get_latest_string():
